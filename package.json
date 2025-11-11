@@ -1,41 +1,19 @@
 {
   "name": "waifu-picker",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.11.0",
   "workspaces": [
-    "src/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch",
-    "start": "node ./dist/server.js",
-    "start-preload": "node ./dist/server.js --preload",
-    "serve": "node --watch ./dist/server.js",
-    "serve-preload": "node --watch ./dist/server.js --preload"
+    "start": "node dist/main.bundle.js"
   },
   "dependencies": {
-    "reflect-metadata": "^0.2.2"
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
-    "@eslint/js": "^9.12.0",
-    "@types/node": "^22.7.5",
-    "@types/webpack-node-externals": "^3",
-    "css-loader": "^7.1.2",
-    "eslint": "^9.12.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^5.6.3",
-    "prettier": "^3.3.3",
-    "raw-loader": "^4.0.2",
-    "sass": "^1.79.5",
-    "sass-loader": "^16.0.2",
-    "style-loader": "^4.0.0",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.8.1",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-merge": "^6.0.1",
-    "webpack-node-externals": "^3.0.0"
+    "eslint": "^9.39.1",
+    "prettier": "^3.6.2",
+    "typesync": "^0.14.3"
   }
 }

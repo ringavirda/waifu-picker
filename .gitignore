@@ -13,11 +13,14 @@
 #!.yarn/cache
 .pnp.*
 
-# node_modules
-node_modules/*
+# node_modules for pnpm mode
 node_modules
 
-# Ignore redered files
+# Ignore rendered files
 dist/
 out/
 build/
+
+# Ignore secrets
+cert/
+secrets/

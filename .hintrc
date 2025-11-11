@@ -2,12 +2,9 @@
   "extends": [
     "development"
   ],
-  "hints": {
-    "axe/parsing": [
-      "default",
-      {
-        "duplicate-id-active": "off"
-      }
-    ]
-  }
+  "browserslist": [
+    "defaults",
+    "not ie 11",
+    "not samsung <= 28"
+  ]
 }

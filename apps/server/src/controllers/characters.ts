@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { controller, ControllerBase, logger, route } from "@server/framework";
-import { GenshinApi } from "@server/services/genshinApi";
-import { ImageProcessor } from "@server/services/imageProcessor";
+import { controller, ControllerBase, logger, route } from "@wp/controllers";
+import { GenshinApi } from "../services/genshinApi";
+import { ImageProcessor } from "../services/imageProcessor";
 
 @controller("/api/chars")
 export class CharactersController extends ControllerBase {

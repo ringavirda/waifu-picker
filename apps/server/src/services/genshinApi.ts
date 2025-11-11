@@ -1,7 +1,7 @@
 import { singleton } from "tsyringe";
 
-import { Character } from "@common/models";
-import { BadRequestError, NotFoundError } from "@server/framework";
+import { Character } from "@wp/common";
+import { BadRequestError, NotFoundError } from "@wp/controllers";
 
 interface WaifuCacheEntry {
   character: Character;
@@ -19,7 +19,7 @@ export class GenshinApi {
     if (!response.ok)
       throw new NotFoundError(`Wasn't able to load waifu list! Oh, no...`);
 
-    return response.json();
+    return (await response.json()) as string[];
   }
 
   public async fetchCharacter(target: string): Promise<Character> {

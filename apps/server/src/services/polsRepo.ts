@@ -2,9 +2,8 @@ import { access, constants, mkdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
 import { singleton } from "tsyringe";
 
-import { MapSerializationFixes } from "@common/fixes";
-import { WaifuPol } from "@common/models";
-import { BadRequestError, logger } from "@server/framework";
+import { MapSerializationFixes, WaifuPol } from "@wp/common";
+import { BadRequestError, logger } from "@wp/controllers";
 
 @singleton()
 export class PollingRepository {

@@ -1,14 +1,12 @@
-import { Request, Response } from "express";
-
-import { WaifuPol } from "@common/models";
 import {
   controller,
   ControllerBase,
   route,
   validateBody,
-} from "@server/framework";
-import { PollingRepository } from "@server/services/polsRepo";
-import { MapSerializationFixes } from "@common/fixes";
+} from "@wp/controllers";
+import { Request, Response } from "express";
+import { PollingRepository } from "../services/polsRepo";
+import { MapSerializationFixes, WaifuPol } from "@wp/common";
 
 @controller("/api/pols")
 export class PollingController extends ControllerBase {
@@ -35,7 +33,7 @@ export class PollingController extends ControllerBase {
     res: Response,
     // next: NextFunction,
   ) {
-    const pol = validateBody(req.body, WaifuPol, ["description"]);
+    const pol = validateBody<WaifuPol>(req.body, WaifuPol, ["description"]);
     await this._repo.createPol(pol);
     return this.ok(res);
   }

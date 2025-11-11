@@ -1,0 +1,193 @@
+@use "styles/variables" as vars;
+@use "styles/mixins" as mx;
+
+.pols-create {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 4rem;
+  background-color: #999;
+  width: fit-content;
+  min-width: 80vw;
+
+  @media screen and (min-width: vars.$split-width) {
+    min-width: 60vw;
+  }
+
+  &::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 102%;
+    height: 102%;
+    z-index: -1;
+    border-radius: 4rem;
+    background-image: linear-gradient(45deg, darkred, darkorange);
+    content: "";
+  }
+
+  .pols-create-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .pols-create-label {
+      font-size: xx-large;
+      font-weight: bolder;
+      font-style: italic;
+      font-family: georgia;
+      margin-left: 1rem;
+
+      span {
+        font-family: cursive;
+        color: darkred;
+      }
+    }
+
+    .pols-create-create {
+      @include mx.button-interact();
+      margin: 0.5rem;
+      margin-left: auto;
+      background-color: darkorange;
+      padding: 0.5rem;
+      padding-inline: 1rem;
+      border-radius: 2rem;
+      font-size: x-large;
+      font-weight: bold;
+      color: white;
+      font-family: arial;
+    }
+
+    .pols-create-close {
+      @include mx.button-interact();
+      margin: 0.5rem;
+      background-color: darkred;
+      padding: 0.5rem;
+      padding-inline: 1rem;
+      border-radius: 2rem;
+      font-size: x-large;
+      font-weight: bold;
+      color: white;
+      font-family: arial;
+    }
+  }
+
+  .pols-create-info {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin-block: 0.5rem;
+    border-radius: 2rem;
+    background-color: #666;
+
+    .pols-create-title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .pols-create-title-label {
+        min-width: -webkit-fill-available;
+        min-width: fit-content;
+        margin-right: 0.5rem;
+        font-size: x-large;
+        font-weight: bold;
+        font-family: arial;
+        color: white;
+      }
+
+      input {
+        width: 100%;
+        font-size: x-large;
+        font-family: cursive;
+        padding: 0.5rem;
+        border-radius: 1rem;
+        border: 0;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .pols-create-description {
+      margin-block: 1rem;
+
+      textarea {
+        width: 100%;
+        border-radius: 1rem;
+        padding: 0.5rem;
+        font-size: large;
+        font-family: calibri;
+        resize: none;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .pols-create-errors-display {
+    font-family: monospace;
+
+    .pols-create-error {
+      background-color: darkred;
+      margin-block: 1rem;
+      font-weight: bold;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-left: 2rem;
+      color: white;
+      width: fit-content;
+    }
+  }
+
+  .pols-create-options {
+    display: flex;
+    flex-direction: row;
+    margin-block: 1rem;
+    justify-content: space-evenly;
+    border-bottom: thick solid darkred;
+    padding: 0.5rem;
+    width: 60%;
+    align-self: center;
+    align-items: center;
+
+    select {
+      font-size: large;
+      padding: 0.2rem;
+      border-radius: 1rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .pols-create-options-add {
+      @include mx.button-interact();
+      margin: 0.5rem;
+      background-color: darkred;
+      padding: 0.5rem;
+      padding-inline: 1rem;
+      border-radius: 2rem;
+      font-size: x-large;
+      font-weight: bold;
+      color: white;
+      font-family: arial;
+    }
+  }
+
+  .pols-create-options-display {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: xx-large;
+    font-family: georgia;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+    color: darkred;
+  }
+}

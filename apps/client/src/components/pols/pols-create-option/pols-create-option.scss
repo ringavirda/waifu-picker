@@ -1,0 +1,61 @@
+@use "styles/mixins" as mx;
+
+.pols-create-waifu-option {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+  width: 80%;
+  background-color: white;
+  margin-block: 1rem;
+  border: solid darkorange;
+  border-radius: 2rem;
+  padding: 0.5rem;
+
+  .pols-create-waifu-icon {
+    position: absolute;
+    object-fit: contain;
+    width: 100px;
+    height: 100px;
+    transform: rotate3d(0, 1, 0, 180deg);
+    top: 50%;
+    left: 0;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background-color: white;
+  }
+
+  .pols-create-waifu-name {
+    position: absolute;
+    font-size: 1.2rem;
+    font-style: italic;
+    font-family: georgia;
+    margin-left: 3rem;
+    color: white;
+  }
+
+  .pols-create-waifu-bar {
+    position: relative;
+    width: 100%;
+    background-color: darkorange;
+    height: 2rem;
+    border-radius: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  .pols-create-waifu-remove {
+    @include mx.button-interact();
+
+    font-size: x-large;
+    font-family: arial;
+    font-weight: bolder;
+    justify-self: flex-end;
+    color: white;
+    background-color: darkorange;
+    border-radius: 2rem;
+    padding: 1rem;
+    padding-block: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}

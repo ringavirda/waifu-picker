@@ -1,0 +1,52 @@
+{
+  "name": "@wp/client",
+  "version": "1.0.0",
+  "scripts": {
+    "clear": "rimraf dist && mkdirp dist",
+    "lint": "eslint --config configs/eslint.config.mjs /fix",
+    "format": "prettier . --write",
+    "build": "webpack --config configs/webpack.dev.cjs",
+    "build-prod": "webpack --config configs/webpack.prod.cjs",
+    "serve": "webpack serve --config configs/webpack.dev.cjs"
+  },
+  "dependencies": {
+    "@wp/common": "workspace:^",
+    "bcryptjs": "^3.0.3",
+    "reflect-metadata": "^0.2.2",
+    "socket.io-client": "^4.8.1",
+    "tsyringe": "^4.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/plugin-proposal-decorators": "^7.28.0",
+    "@babel/preset-env": "^7.28.5",
+    "@types/babel__core": "~7.20.5",
+    "@types/babel__preset-env": "~7.10.0",
+    "@types/file-loader": "~5.0.4",
+    "@types/sass-loader": "~8.0.10",
+    "@types/webpack-node-externals": "~3.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.39.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.6.4",
+    "mini-css-extract-plugin": "^2.9.4",
+    "mkdirp": "^3.0.1",
+    "prettier": "^3.6.2",
+    "raw-loader": "^4.0.2",
+    "rimraf": "^6.1.0",
+    "sass": "^1.93.3",
+    "sass-loader": "^16.0.6",
+    "terser-webpack-plugin": "^5.3.14",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2",
+    "webpack-html-plugin": "^0.1.1",
+    "webpack-merge": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
+  }
+}

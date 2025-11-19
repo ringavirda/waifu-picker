@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 
-import { StaticConfig } from "@wp/common";
-
 export function corsMiddleware(
   req: Request,
   res: Response,
@@ -14,10 +12,7 @@ export function corsMiddleware(
   );
 
   if (req.method == "OPTIONS") {
-    res.header(
-      "Access-Control-Allow-Methods",
-      StaticConfig.serverAllowedMethods.map((m) => m.toUpperCase()).join(", "),
-    );
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
     res.status(204).send();
   } else return next();
 }

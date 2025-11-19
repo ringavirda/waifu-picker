@@ -44,8 +44,8 @@ export class ConfigService {
 
   public toApiRoute(path: string, params?: Record<string, any>): URL {
     const rawUrl = this._config.isSecure
-      ? `https://${this.hostname}:${this.secPort}${this._config.serverRoutesPrefix}/${path}`
-      : `http://${this.hostname}:${this.port}${this._config.serverRoutesPrefix}/${path}`;
+      ? `https://${this.hostname}:${this.secPort}${this._config.serverRoutesPrefix}${path}`
+      : `http://${this.hostname}:${this.port}${this._config.serverRoutesPrefix}${path}`;
 
     const url = new URL(rawUrl);
     if (params) {

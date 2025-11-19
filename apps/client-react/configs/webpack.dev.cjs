@@ -17,7 +17,7 @@ const devConfig = {
       directory: outputPath,
     },
     compress: true,
-    port: 5500,
+    port: 5000,
   },
 };
 

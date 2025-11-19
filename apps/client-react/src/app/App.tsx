@@ -1,20 +1,28 @@
 import { Route, Routes } from "react-router";
 
-import "./app.scss";
-
 import { CharsPage, HomePage, PolsPage } from "@/pages";
 import { AppFooter, AppHeader, AppNavbar } from "@/app";
 
 export function App() {
   return (
-    <div className="app-root">
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <AppHeader />
       <AppNavbar />
-      <div className="app-router">
+      <div
+        style={{
+          flexGrow: "1",
+        }}
+      >
         <Routes>
-          <Route index element={HomePage()} />
-          <Route path="/chars" element={CharsPage()} />
-          <Route path="/pols" element={PolsPage()} />
+          <Route index element={<HomePage />} />
+          <Route path="/chars" element={<CharsPage />} />
+          <Route path="/pols" element={<PolsPage />} />
         </Routes>
       </div>
       <AppFooter />

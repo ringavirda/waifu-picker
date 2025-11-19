@@ -25,9 +25,10 @@ export class CacheService {
 
   public getValue<T>(id: Newable, key: string): T {
     const cacheId = this.getCacheId(id);
+    this.keyExists(cacheId, key);
 
     const entry = this._cache.get(cacheId) as Map<string, CacheItem<T>>;
-    return entry.get(key) as T;
+    return entry.get(key)?.value as T;
   }
 
   public setValue<T>(id: Newable, key: string, value: T): void {
@@ -44,6 +45,7 @@ export class CacheService {
     reducer: (current: T | undefined) => T,
   ): void {
     const cacheId = this.getCacheId(id);
+    this.keyExists(cacheId, key);
 
     const entry = this._cache.get(cacheId) as Map<string, CacheItem<T>>;
     const current = entry.get(key);
@@ -54,6 +56,7 @@ export class CacheService {
 
   public deleteValue(id: Newable, key: string): void {
     const cacheId = this.getCacheId(id);
+    this.keyExists(cacheId, key);
 
     const entry = this._cache.get(cacheId) as Map<string, CacheItem<any>>;
     entry.delete(key);
@@ -73,6 +76,7 @@ export class CacheService {
       this._cleanupInterval = null;
     }
   }
+
   public startCleanup(): void {
     if (!this._cleanupInterval) {
       this._cleanupInterval = setInterval(
@@ -90,6 +94,15 @@ export class CacheService {
     this._ids.set(cacheable, cacheId);
     this._cache.set(cacheId, new Map<string, CacheItem<any>>());
     return cacheId;
+  }
+
+  private keyExists(cacheId: string, key: string): void {
+    const entry = this._cache.get(cacheId) as Map<string, CacheItem<any>>;
+    if (!entry.has(key)) {
+      throw new Error(
+        `Cache key "${key}" does not exist in cache "${cacheId}".`,
+      );
+    }
   }
 
   private removeExpiredItems(): void {

@@ -13,8 +13,8 @@ const prodConfig = {
   },
   output: {
     path: outputPath,
-    filename: "[name].bundle.js",
-    chunkFilename: "[name].bundle.js",
+    filename: "[name].[hash].bundle.js",
+    chunkFilename: "[name].[hash].bundle.js",
   },
 };
 

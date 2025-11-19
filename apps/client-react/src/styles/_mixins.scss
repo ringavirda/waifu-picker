@@ -1,0 +1,14 @@
+@mixin button-interact {
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(115%);
+  }
+  &:active {
+    filter: brightness(95%);
+  }
+  &:focus {
+    outline: none;
+  }
+}

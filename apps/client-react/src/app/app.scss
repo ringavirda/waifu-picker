@@ -1,0 +1,12 @@
+@use "styles/variables" as vars;
+@use "styles/mixins" as mx;
+
+.app-root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-router {
+  flex-grow: 1;
+}

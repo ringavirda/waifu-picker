@@ -84,7 +84,7 @@ const commonConfig = {
       template: path.resolve(sourcePath, "index.html"),
       favicon: path.resolve(sourcePath, "favicon.ico"),
     }),
-    new MiniCssExtractPlugin({ filename: "[name].bundle.css" }),
+    new MiniCssExtractPlugin({ filename: "[name].[hash].bundle.css" }),
   ],
 };
 

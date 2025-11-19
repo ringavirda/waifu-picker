@@ -1,0 +1,55 @@
+.header {
+  background-color: lightgray;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .title {
+    font-size: 3rem;
+    font-weight: bolder;
+    margin: 0.5em;
+    font-family: cursive;
+    font-style: italic;
+    border-right: thick solid orange;
+    text-decoration: none;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .waifu-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    height: 10em;
+
+    .waifu-list-desc {
+      margin-left: 0.5em;
+      font-size: large;
+      font-weight: 600;
+      font-family: cursive;
+    }
+
+    .waifu-list {
+      margin: 0.5em;
+      overflow-y: auto;
+      height: 7em;
+      font-size: medium;
+      font-weight: 600;
+
+      &::-webkit-scrollbar {
+        width: 16px;
+      }
+      &::-webkit-scrollbar-track {
+        border-radius: 25%;
+        background: transparent;
+        border: thin solid orange;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 25%;
+        background-color: darkorange;
+      }
+    }
+  }
+}

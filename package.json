@@ -9,10 +9,12 @@
     "start": "node dist/main.bundle.js"
   },
   "dependencies": {
+    "reflect-metadata": "^0.2.2",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
     "eslint": "^9.39.1",
+    "nx": "22.0.4",
     "prettier": "^3.6.2",
     "typesync": "^0.14.3"
   }

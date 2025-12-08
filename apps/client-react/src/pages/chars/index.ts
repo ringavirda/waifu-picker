@@ -1,1 +1,0 @@
-export { CharsPage } from "./Page";

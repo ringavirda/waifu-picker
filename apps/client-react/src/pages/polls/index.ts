@@ -1,1 +1,0 @@
-export { PollsPage } from "./Page";

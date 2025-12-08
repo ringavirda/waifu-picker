@@ -1,14 +1,14 @@
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 
 import { StatusResponse } from "../models";
-import { ConfigService } from "../services";
+import { StaticConfig } from "../static-config";
 
 @injectable("Singleton")
 export class StatusService {
-  constructor(@inject(ConfigService) private _config: ConfigService) {}
+  constructor() {}
 
   public async isServerAlive(): Promise<boolean> {
-    const statusEndpoint = this._config.toApiRoute("/");
+    const statusEndpoint = StaticConfig.toApiRoute("/");
     const response = await fetch(statusEndpoint);
     if (response.ok) {
       const parsed = (await response.json()) as StatusResponse;

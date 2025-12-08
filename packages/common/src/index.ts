@@ -1,6 +1,6 @@
-export { StaticConfig } from "./configs";
+export { StaticConfig } from "./static-config";
 export {
-  MapSerializationFixes,
+  SerializationHelpers as JsonSerialization,
   fetchCurrentIp,
   useDefaultServices,
 } from "./helpers";

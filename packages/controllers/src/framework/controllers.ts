@@ -58,7 +58,7 @@ export abstract class ControllerBase {
 export function controller<T extends ControllerBase>(
   controllerRoute: string = "/api",
 ) {
-  return function (target: { new (): T }) {
+  return function (target: { new (...args: any[]): T }) {
     Reflect.defineMetadata("controllerRoute", controllerRoute, target);
 
     singleton()(target);
@@ -84,7 +84,7 @@ export function route<T extends ControllerBase>(
 }
 
 export function useControllerRoutes<T extends ControllerBase>(
-  ctor: { new (): T },
+  ctor: { new (...args: any[]): T },
   server: Express,
 ) {
   const controller = new ctor();

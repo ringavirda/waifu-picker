@@ -1,4 +1,8 @@
-export { App } from "./App";
-export { AppHeader } from "./header/AppHeader";
-export { AppFooter } from "./footer/AppFooter";
-export { AppNavbar } from "./navbar/AppNavbar";
+export { useAppServices } from "./services";
+export { useAppRouter } from "./routes";
+export {
+  ServiceProvider,
+  useService,
+  bindService,
+  useServiceProvider,
+} from "./ServiceProvider";

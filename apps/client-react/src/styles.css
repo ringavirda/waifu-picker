@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--wp-background-color);
+    color: var(--wp-text-color);
+    font-family: var(--font-main);
+  }
+}
+
+@theme {
+  --color-primary: rgb(131, 94, 212);
+  --color-secondary: #b9e0ff;
+  --color-background: #f9f9f9;
+  --color-text: #333333;
+
+  --color-border: #dddddd;
+  --font-main: "Roboto", sans-serif, Arial, Helvetica;
+}

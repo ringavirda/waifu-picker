@@ -8,8 +8,8 @@ const devConfig = {
   devtool: "source-map",
   output: {
     path: outputPath,
-    filename: "[name].[hash].bundle.js",
-    chunkFilename: "[name].[hash].bundle.js",
+    filename: "[name].[contenthash].bundle.js",
+    chunkFilename: "[name].[contenthash].bundle.js",
     clean: true,
   },
   devServer: {
@@ -17,7 +17,9 @@ const devConfig = {
       directory: outputPath,
     },
     compress: true,
-    port: 5000,
+    port: 5500,
+    historyApiFallback: true,
+    hot: true,
   },
 };
 

@@ -1,5 +1,5 @@
-export { WaifuPol, WaifuPolUpdateDto } from "./Pols";
+export { WaifuPoll } from "./Polls";
 export { VisionColors } from "./Characters";
+export type { WaifuPollUpdateDto } from "./Polls";
 export type { Character } from "./Characters";
-export type { StatusResponse } from "./Responses";
-export type { IpResponse } from "./Responses";
+export type { StatusResponse, IpResponse } from "./Responses";

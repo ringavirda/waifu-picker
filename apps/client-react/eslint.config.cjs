@@ -3,7 +3,7 @@ export default [
     ignores: ["node_modules/**", "dist/**"],
   },
   {
-    files: ["**/*.{ts,tsx,js,jsx}"],
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
       parser: require("@typescript-eslint/parser"),
       parserOptions: {

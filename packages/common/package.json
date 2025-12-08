@@ -1,23 +1,22 @@
 {
   "name": "@wp/common",
-  "version": "1.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/lib/cjs/index.js",
+  "module": "./dist/lib/esm/index.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "@wp/common": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/lib/esm/index.js",
+      "default": "./dist/lib/cjs/index.js"
     }
   },
   "scripts": {
     "clear": "rimraf dist && mkdirp dist",
     "format": "prettier src/** --write --log-level silent",
     "lint": "eslint src/** --fix",
-    "build": "yarn clear && yarn format && yarn lint && tsc"
+    "build": "node scripts/build.cjs"
   },
   "dependencies": {
     "inversify": "^7.10.4",
@@ -29,6 +28,7 @@
     "@types/node": "^24.10.0",
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.47.0",
+    "cpy-cli": "^6.0.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",

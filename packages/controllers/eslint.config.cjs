@@ -8,13 +8,14 @@ module.exports = defineConfig(
     ignores: ["node_modules/**", "dist/**"],
   },
   {
-    files: ["**/*.{ts,tsx,js,jsx}"],
+    files: ["**/*.{ts,js}"],
     languageOptions: {
       parser: require("@typescript-eslint/parser"),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: "module",
-        ecmaFeatures: { jsx: true },
+        project: "./tsconfig.json",
+        tsconfigRootDir: __dirname,
       },
     },
     plugins: {

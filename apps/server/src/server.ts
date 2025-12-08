@@ -1,26 +1,26 @@
 import "reflect-metadata";
 
 import express from "express";
-// import cors from "cors";
+import cors from "cors";
 import http from "http";
-import https from "https";
+// import https from "https";
 import { Server } from "socket.io";
 import { access, constants } from "fs/promises";
 import { resolve } from "path";
-import { readFileSync } from "fs";
+// import { readFileSync } from "fs";
 
 import { CharactersController } from "./controllers/characters";
 import { DefaultController } from "./controllers/default";
 import { PollingController } from "./controllers/polling";
 import {
-  corsMiddleware,
+  // corsMiddleware,
   errorHandlingMiddleware,
   logger,
   loggingMiddleware,
   notFoundMiddleware,
   useControllerRoutes,
 } from "@wp/controllers";
-import { MapSerializationFixes, StaticConfig } from "@wp/common";
+import { JsonSerialization, StaticConfig } from "@wp/common";
 
 logger.info("Server", "Startup begin.");
 
@@ -29,24 +29,19 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(
   express.json({
-    reviver: MapSerializationFixes.reviver,
+    reviver: JsonSerialization.reviver,
   }),
 );
 
-// app.use(cors({ origin: "https://felled-stars.org", credentials: true }));
-app.use(corsMiddleware);
 app.use(loggingMiddleware);
+app.use(cors({ origin: "*", credentials: true }));
+// app.use(corsMiddleware);
 
 try {
   const staticPath = resolve(__dirname, "public");
   await access(staticPath, constants.F_OK);
-  StaticConfig.clientRoutes.forEach((r) =>
-    app.use(r, express.static(staticPath)),
-  );
-  logger.info(
-    "Server",
-    `Client routes loaded: [ ${StaticConfig.clientRoutes.join(", ")} ]`,
-  );
+  app.use(express.static(staticPath));
+  logger.info("Server", `Client routes loaded`);
 } catch {
   logger.warn(
     "Server",
@@ -63,11 +58,11 @@ app.use(errorHandlingMiddleware);
 app.use(notFoundMiddleware);
 
 const server = http.createServer(app);
-server.listen(StaticConfig.commonPort, () => {
+server.listen(StaticConfig.apiPort, () => {
   logger.info(
     "Server",
     "Startup finished, listening on:" +
-      `\nhttp://${StaticConfig.commonHostname}:${StaticConfig.commonPort}`,
+      `\nhttp://${StaticConfig.apiHostname}:${StaticConfig.apiPort}`,
   );
 });
 
@@ -84,11 +79,8 @@ server.listen(StaticConfig.commonPort, () => {
 //   );
 // });
 
-if (process.argv.includes(`--${StaticConfig.serverPreloadFlag}`)) {
-  logger.info(
-    "Server",
-    `--${StaticConfig.serverPreloadFlag} was passed, starting to preload media...`,
-  );
+if (process.argv.includes(`--preload`)) {
+  logger.info("Server", `--preload was passed, starting to preload media...`);
   await CharactersController.preloadAndPreprocessMedia();
 }
 

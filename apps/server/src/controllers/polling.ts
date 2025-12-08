@@ -5,8 +5,8 @@ import {
   validateBody,
 } from "@wp/controllers";
 import { Request, Response } from "express";
-import { PollingRepository } from "../services/polsRepo";
-import { MapSerializationFixes, WaifuPol } from "@wp/common";
+import { PollingRepository } from "../services/pollsRepo";
+import { JsonSerialization, WaifuPoll } from "@wp/common";
 
 @controller("/api/pols")
 export class PollingController extends ControllerBase {
@@ -21,8 +21,8 @@ export class PollingController extends ControllerBase {
     // next: NextFunction,
   ) {
     const json = JSON.stringify(
-      await this._repo.loadPols(),
-      MapSerializationFixes.replacer,
+      await this._repo.loadPolls(),
+      JsonSerialization.replacer,
     );
     return this.ok(res, json);
   }
@@ -33,8 +33,8 @@ export class PollingController extends ControllerBase {
     res: Response,
     // next: NextFunction,
   ) {
-    const pol = validateBody<WaifuPol>(req.body, WaifuPol, ["description"]);
-    await this._repo.createPol(pol);
+    const poll = validateBody<WaifuPoll>(req.body, WaifuPoll, ["description"]);
+    await this._repo.createPoll(poll);
     return this.ok(res);
   }
 
@@ -44,8 +44,8 @@ export class PollingController extends ControllerBase {
     res: Response,
     // next: NextFunction,
   ) {
-    const pol = validateBody(req.body, WaifuPol, ["description"]);
-    await this._repo.updatePolVotes(pol.title, pol.options);
+    const poll = validateBody(req.body, WaifuPoll, ["description"]);
+    await this._repo.updatePollVotes(poll.title, poll.options);
     return this.ok(res);
   }
 
@@ -55,8 +55,8 @@ export class PollingController extends ControllerBase {
     res: Response,
     // next: NextFunction,
   ) {
-    const pol = validateBody(req.body, WaifuPol, ["description", "options"]);
-    await this._repo.removePol(pol.title);
+    const poll = validateBody(req.body, WaifuPoll, ["description", "options"]);
+    await this._repo.removePoll(poll.title);
     return this.ok(res);
   }
 }

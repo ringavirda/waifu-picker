@@ -1,73 +1,102 @@
-import { inject, injectable, Newable } from "inversify";
-import { ConfigService } from "./ConfigService";
+import { injectable, Newable } from "inversify";
+import { StaticConfig } from "../static-config";
+import { hashString, SerializationHelpers } from "../helpers";
+
+type Cacheable = Newable;
 
 type CacheItem<T> = {
   value: T;
   created: number;
 };
 
+type CacheLine<T> = Map<string, CacheItem<T>>;
+type CacheIds = Map<string, string>;
+
+type Cache = {
+  cacheLines: Map<string, CacheLine<any>>;
+  cacheIds: CacheIds;
+};
+
 @injectable("Singleton")
 export class CacheService {
-  private _cache = new Map<string, Map<string, CacheItem<any>>>();
-  private _ids = new Map<Newable, string>();
-  private _cleanupInterval: NodeJS.Timeout | null = null;
+  private _cache: Cache = {
+    cacheLines: new Map<string, Map<string, CacheItem<any>>>(),
+    cacheIds: new Map<string, string>(),
+  };
 
-  constructor(@inject(ConfigService) private _config: ConfigService) {
-    if (this._config.isCacheCleanupEnabled()) this.startCleanup();
+  private _cacheContainer?: Record<string, any> | null = null;
+
+  private get _cacheIds() {
+    return this._cache.cacheIds;
+  }
+  private get _cacheLines() {
+    return this._cache.cacheLines;
   }
 
-  public hasKey(id: Newable, key: string): boolean {
+  private _cleanupInterval: NodeJS.Timeout | null = null;
+  private readonly _cachePersistenceKey = "WPCache";
+
+  constructor() {
+    if (StaticConfig.isCacheCleanupEnabled()) this.startCleanup();
+  }
+
+  public hasKey(id: Cacheable, key: string): boolean {
     const cacheId = this.getCacheId(id);
 
-    const entry = this._cache.get(cacheId) as Map<string, CacheItem<any>>;
-    return entry.has(key);
+    const line = this._cache.cacheLines.get(cacheId) as CacheLine<any>;
+    return line.has(key);
   }
 
-  public getValue<T>(id: Newable, key: string): T {
+  public getValue<T>(id: Cacheable, key: string): T {
     const cacheId = this.getCacheId(id);
     this.keyExists(cacheId, key);
 
-    const entry = this._cache.get(cacheId) as Map<string, CacheItem<T>>;
-    return entry.get(key)?.value as T;
+    const line = this._cache.cacheLines.get(cacheId) as CacheLine<T>;
+    return line.get(key)?.value as T;
   }
 
-  public setValue<T>(id: Newable, key: string, value: T): void {
+  public setValue<T>(id: Cacheable, key: string, value: T): void {
     const cacheId = this.getCacheId(id);
 
-    const entry = this._cache.get(cacheId) as Map<string, CacheItem<T>>;
-    entry.set(key, { value, created: Date.now() });
-    this._cache.set(cacheId, entry);
+    const line = this._cacheLines.get(cacheId) as CacheLine<T>;
+    line.set(key, { value, created: Date.now() });
+    this.setCacheLine(cacheId, line);
   }
 
   public reduceValue<T>(
-    id: Newable,
+    id: Cacheable,
     key: string,
     reducer: (current: T | undefined) => T,
   ): void {
     const cacheId = this.getCacheId(id);
     this.keyExists(cacheId, key);
 
-    const entry = this._cache.get(cacheId) as Map<string, CacheItem<T>>;
-    const current = entry.get(key);
+    const line = this._cacheLines.get(cacheId) as CacheLine<T>;
+    const current = line.get(key);
     const reduced = reducer(current?.value);
-    entry.set(key, { value: reduced, created: Date.now() });
-    this._cache.set(cacheId, entry);
+    line.set(key, { value: reduced, created: Date.now() });
+    this.setCacheLine<T>(cacheId, line);
   }
 
-  public deleteValue(id: Newable, key: string): void {
+  public deleteValue(id: Cacheable, key: string): void {
     const cacheId = this.getCacheId(id);
     this.keyExists(cacheId, key);
 
-    const entry = this._cache.get(cacheId) as Map<string, CacheItem<any>>;
-    entry.delete(key);
-    this._cache.set(cacheId, entry);
+    const line = this._cacheLines.get(cacheId);
+    if (!line) throw new Error(`Cache line "${cacheId}" does not exist.`);
+    line.delete(key);
+    this.setCacheLine(cacheId, line);
   }
 
-  public clearCache(id: Newable): void {
+  public clearCache(id: Cacheable): void {
     const cacheId = this.getCacheId(id);
 
-    this._cache.delete(cacheId);
-    this._ids.delete(id);
+    this._cacheLines.delete(cacheId);
+    this._cacheIds.delete(id.name.toLowerCase());
+    if (this._cacheContainer) {
+      this._cacheContainer[this._cachePersistenceKey] =
+        SerializationHelpers.stringify(this._cache);
+    }
   }
 
   public stopCleanup(): void {
@@ -81,47 +110,79 @@ export class CacheService {
     if (!this._cleanupInterval) {
       this._cleanupInterval = setInterval(
         () => this.removeExpiredItems(),
-        this._config.cacheTtlSeconds * 1000,
+        StaticConfig.cacheTtlSeconds * 1000,
       );
     }
   }
 
-  private getCacheId(cacheable: Newable): string {
-    let cacheId = this._ids.get(cacheable);
+  public enablePersistence(container: Record<string, any>): void {
+    if (container[this._cachePersistenceKey]) {
+      this._cache = SerializationHelpers.parseJson(
+        container[this._cachePersistenceKey],
+      );
+    } else {
+      container[this._cachePersistenceKey] = SerializationHelpers.stringify(
+        this._cache,
+      );
+    }
+
+    this._cacheContainer = container;
+    StaticConfig.setCachePersistence(true);
+  }
+
+  public disablePersistence(): void {
+    if (this._cacheContainer) {
+      delete this._cacheContainer[this._cachePersistenceKey];
+    }
+    this._cacheContainer = null;
+    StaticConfig.setCachePersistence(false);
+  }
+
+  private getCacheId(cacheable: Cacheable): string {
+    const cacheableName = cacheable.name.toLowerCase();
+    let cacheId = this._cacheIds.get(cacheableName);
     if (cacheId) return cacheId;
 
-    cacheId = crypto.randomUUID();
-    this._ids.set(cacheable, cacheId);
-    this._cache.set(cacheId, new Map<string, CacheItem<any>>());
+    cacheId = hashString(cacheableName).toString();
+    this._cacheIds.set(cacheableName, cacheId);
+    this._cacheLines.set(cacheId, new Map<string, CacheItem<any>>());
     return cacheId;
   }
 
   private keyExists(cacheId: string, key: string): void {
-    const entry = this._cache.get(cacheId) as Map<string, CacheItem<any>>;
-    if (!entry.has(key)) {
+    const entry = this._cacheLines.get(cacheId);
+    if (!entry?.has(key)) {
       throw new Error(
         `Cache key "${key}" does not exist in cache "${cacheId}".`,
       );
     }
   }
 
+  private setCacheLine<T>(cacheId: string, line: CacheLine<T>) {
+    this._cacheLines.set(cacheId, line);
+    if (this._cacheContainer) {
+      this._cacheContainer[this._cachePersistenceKey] =
+        SerializationHelpers.stringify(this._cache);
+    }
+  }
+
   private removeExpiredItems(): void {
     const now = Date.now();
-    const ttl = this._config.cacheTtlSeconds * 1000;
-    for (const [cacheId, entry] of this._cache.entries()) {
+    const ttl = StaticConfig.cacheTtlSeconds * 1000;
+    for (const [cacheId, entry] of this._cacheLines.entries()) {
       for (const [key, item] of entry.entries()) {
         if (now - item.created > ttl) {
           entry.delete(key);
         }
       }
       if (entry.size === 0) {
-        this._cache.delete(cacheId);
-        this._ids.forEach((value, key) => {
+        this._cacheLines.delete(cacheId);
+        this._cacheIds.forEach((value, key) => {
           if (value === cacheId) {
-            this._ids.delete(key);
+            this._cacheIds.delete(key);
           }
         });
-      } else this._cache.set(cacheId, entry);
+      } else this._cacheLines.set(cacheId, entry);
     }
   }
 }

@@ -1,0 +1,27 @@
+@import "@/styles.css";
+
+@layer components {
+  .navbar {
+    @apply border-primary flex flex-wrap items-center justify-evenly gap-4 border-b-2 bg-gray-800 px-4 py-4 text-white md:justify-start md:py-2;
+  }
+
+  .navlink-logo {
+    @apply flex items-center justify-start text-4xl transition-all hover:scale-102 active:scale-100;
+  }
+
+  .navlink {
+    @apply border-primary/30 h-fit min-w-36 rounded-2xl border-2 bg-gray-700 px-4 py-2 text-center text-2xl text-white no-underline transition-all hover:scale-102 hover:bg-gray-600 active:scale-100 active:bg-gray-500;
+  }
+
+  .active {
+    @apply bg-primary/60 hover:bg-primary/80 active:bg-primary/90;
+  }
+
+  .spacer {
+    @apply hidden h-16 border-gray-200/60 md:block md:flex-1 md:border-l-2;
+  }
+
+  .footer {
+    @apply border-primary flex flex-col items-center border-t-2 bg-gray-800 px-4 py-2 text-end text-2xl text-gray-100 md:h-16 md:flex-row md:justify-center md:py-4;
+  }
+}

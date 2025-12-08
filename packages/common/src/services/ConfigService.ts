@@ -1,58 +1,54 @@
 import { injectable } from "inversify";
-
-import { StaticConfig } from "../configs";
+import { StaticConfig } from "../static-config";
 
 @injectable("Singleton")
 export class ConfigService {
-  private _config = StaticConfig;
+  private _options: Record<string, any> = {};
 
-  get port(): number {
-    return this._config.commonPort;
+  private _optionsContainer?: Record<string, any> | null = null;
+  private readonly _optionsPersistenceKey = "WPOptions";
+
+  public getOption<T>(key: string): T | undefined {
+    return this._options[key] as T;
   }
 
-  get secPort(): number {
-    return this._config.commonSecPort;
-  }
-
-  get hostname(): string {
-    return this._config.commonHostname;
-  }
-
-  get cacheTtlSeconds(): number {
-    return this._config.cacheTtlSeconds;
-  }
-
-  public isSecure(): boolean {
-    return this._config.isSecure;
-  }
-
-  public setSecure(isSecure: boolean): void {
-    this._config.isSecure = isSecure;
-  }
-
-  public isCacheCleanupEnabled(): boolean {
-    return this._config.cacheCleanupEnabled;
-  }
-
-  public setCacheCleanup(enabled: boolean): void {
-    this._config.cacheCleanupEnabled = enabled;
-  }
-
-  public setCacheTtl(seconds: number): void {
-    this._config.cacheTtlSeconds = seconds;
-  }
-
-  public toApiRoute(path: string, params?: Record<string, any>): URL {
-    const rawUrl = this._config.isSecure
-      ? `https://${this.hostname}:${this.secPort}${this._config.serverRoutesPrefix}${path}`
-      : `http://${this.hostname}:${this.port}${this._config.serverRoutesPrefix}${path}`;
-
-    const url = new URL(rawUrl);
-    if (params) {
-      Object.keys(params).forEach((key) => {
-        url.searchParams.append(key, params[key]);
-      });
+  public setOption<T>(key: string, value: T): void {
+    this._options[key] = value;
+    if (this._optionsContainer) {
+      this._optionsContainer[this._optionsPersistenceKey] = JSON.stringify(
+        this._options,
+      );
     }
-    return url;
+  }
+
+  public setOptions(options: Record<string, any>): void {
+    this._options = { ...this._options, ...options };
+    if (this._optionsContainer) {
+      this._optionsContainer[this._optionsPersistenceKey] = JSON.stringify(
+        this._options,
+      );
+    }
+  }
+
+  public clearOptions(): void {
+    this._options = {};
+  }
+
+  public enableOptionsPersistence(container: Record<string, any>): void {
+    if (container[this._optionsPersistenceKey]) {
+      this._options = JSON.parse(container[this._optionsPersistenceKey]);
+    } else {
+      container[this._optionsPersistenceKey] = JSON.stringify(this._options);
+    }
+    this._optionsContainer = container;
+    StaticConfig.setOptionsPersistence(true);
+  }
+
+  public disableOptionsPersistence(): void {
+    if (this._optionsContainer) {
+      delete this._optionsContainer[this._optionsPersistenceKey];
+    }
+    this._optionsContainer = null;
+    StaticConfig.setOptionsPersistence(false);
   }
 }

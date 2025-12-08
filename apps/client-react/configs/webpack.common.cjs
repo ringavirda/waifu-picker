@@ -45,29 +45,36 @@ const commonConfig = {
         ],
       },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader",
           {
-            loader: "sass-loader",
+            loader: "css-loader",
             options: {
-              sassOptions: {
-                loadPaths: [sourcePath],
+              importLoaders: 1,
+              modules: {
+                auto: true,
+                namedExport: false,
+              },
+            },
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require("@tailwindcss/postcss"),
+                  require("autoprefixer"),
+                  require("postcss-preset-env"),
+                ],
               },
             },
           },
         ],
       },
       {
-        test: /\.(png|jpg|svg|gif)$/,
-        use: {
-          loader: "file-loader",
-          options: {
-            name: "[name].[ext]",
-            outputPath: "assets",
-          },
-        },
+        test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource",
       },
     ],
   },
@@ -83,7 +90,9 @@ const commonConfig = {
       template: path.resolve(__dirname, "../public", "index.html"),
       favicon: path.resolve(__dirname, "../public", "favicon.ico"),
     }),
-    new MiniCssExtractPlugin({ filename: "styles.[name].[hash].bundle.css" }),
+    new MiniCssExtractPlugin({
+      filename: "styles.[name].[contenthash].bundle.css",
+    }),
     new CopyWebpackPlugin({
       patterns: [
         {

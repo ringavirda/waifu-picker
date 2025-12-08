@@ -5,16 +5,17 @@ module.exports = defineConfig(
   require("typescript-eslint").configs.recommended,
   require("eslint-config-prettier/flat"),
   {
-    ignores: ["node_modules/**", "dist/**"],
+    ignores: ["node_modules/**", "dist/**", "./**/*js"],
   },
   {
-    files: ["**/*.{ts,tsx,js,jsx}"],
+    files: ["**/*.{ts,js}"],
     languageOptions: {
       parser: require("@typescript-eslint/parser"),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: "module",
-        ecmaFeatures: { jsx: true },
+        project: "./tsconfig.json",
+        tsconfigRootDir: __dirname,
       },
     },
     plugins: {

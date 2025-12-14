@@ -1,0 +1,8 @@
+FROM node:lts-alpine
+WORKDIR /app
+COPY . .
+RUN npm install --omit=dev
+ENV SERVER_API_HOSTNAME=0.0.0.0
+ENV SERVER_API_PORT=5550
+ENV SERVER_CLIENT_BASE_PATH=/waifu-new
+CMD ["node", "www/main.bundle.js"]

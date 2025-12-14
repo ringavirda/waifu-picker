@@ -1,0 +1,23 @@
+.error {
+  display: flex;
+  flex-direction: column;
+  margin: 2em;
+  padding: 1em;
+  background-color: red;
+  border-radius: 1em;
+
+  .error-title {
+    font-size: xx-large;
+    font-weight: bolder;
+    color: white;
+  }
+
+  .error-message {
+    margin-top: 1em;
+    background-color: white;
+    padding: 1em;
+    border-radius: 0.5em;
+    font-weight: 600;
+    font-size: large;
+  }
+}

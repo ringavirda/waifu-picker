@@ -1,8 +1,9 @@
-import { inject } from "tsyringe";
+import { inject } from "inversify";
 import { VisionColors } from "@wp/common";
 
-import { component, ComponentBase } from "@/components";
-import { ICharsApi } from "@/services";
+import { TYPES } from "@/app";
+import { ICharactersApi } from "@/app/api";
+import { component, ComponentBase } from "@/app/components";
 
 import "./chars-card.scss";
 import template from "./chars-card.html";
@@ -12,7 +13,7 @@ export class CharsCard extends ComponentBase {
   private readonly _portraitResizeHeight = 540 * 2;
   private readonly _portraitResizeWidth = 340 * 2;
 
-  constructor(@inject("ICharsApi") private _api: ICharsApi) {
+  constructor(@inject(TYPES.ICharactersApi) private _api: ICharactersApi) {
     super(CharsCard);
   }
 

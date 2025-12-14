@@ -1,0 +1,18 @@
+.loading-spinner {
+  width: 300px;
+  height: 300px;
+  position: fixed;
+  top: 50vh;
+  left: 50vh;
+  translate: -50% -50%;
+  border: 10px solid;
+  border-radius: 50%;
+  border-color: orange transparent orange transparent;
+  animation: spinner 2s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -3,10 +3,11 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "bundler",
+    "lib": ["ESNext", "DOM"],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/index.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

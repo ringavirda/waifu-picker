@@ -19,7 +19,7 @@ module.exports = defineConfig(
       },
     },
     plugins: {
-      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+      // "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
       prettier: require("eslint-plugin-prettier"),
     },
     rules: {

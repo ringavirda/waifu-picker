@@ -1,5 +1,5 @@
 import { CacheService, ConfigService, StaticConfig } from "@wp/common";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { BehaviorSubject, Observable } from "rxjs";
 import { ConfigOptionIds } from "../app-services";
 
@@ -13,9 +13,6 @@ export type PrincessImage = {
 
 @injectable("Singleton")
 export class PrincessService {
-  private _config: ConfigService;
-  private _cache: CacheService;
-
   private readonly _baseUrl = `${StaticConfig.genshinApiBaseUrl}/characters`;
 
   private readonly _princess$ = new BehaviorSubject<PrincessImage>({
@@ -23,9 +20,19 @@ export class PrincessService {
   });
   private readonly _princessCache = "princess-image";
 
-  constructor(config: ConfigService, cache: CacheService) {
-    this._config = config;
-    this._cache = cache;
+  private _config!: ConfigService;
+  private _cache!: CacheService;
+
+  // Use setter-based injection so decorators target setters (compatible
+  // with Babel legacy decorator transform + inversify at runtime).
+  @inject(ConfigService)
+  public set config(value: ConfigService) {
+    this._config = value;
+  }
+
+  @inject(CacheService)
+  public set cache(value: CacheService) {
+    this._cache = value;
   }
 
   public fetchPrincessImage(princessPath: string): Observable<PrincessImage> {

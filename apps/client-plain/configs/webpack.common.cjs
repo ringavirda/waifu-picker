@@ -1,9 +1,11 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const sourcePath = path.resolve(__dirname, "..", "src");
-const entryPath = path.resolve(sourcePath, "index.ts");
+const publicPath = path.resolve(__dirname, "..", "public");
+const entryPath = path.resolve(sourcePath, "main.ts");
 
 const commonConfig = {
   target: "web",
@@ -66,7 +68,6 @@ const commonConfig = {
           loader: "file-loader",
           options: {
             name: "[name].[ext]",
-            outputPath: "assets",
           },
         },
       },
@@ -80,11 +81,21 @@ const commonConfig = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: path.resolve(sourcePath, "index.html"),
-      favicon: path.resolve(sourcePath, "favicon.ico"),
+      filename: "../index.html",
+      template: path.resolve(publicPath, "index.html"),
+      favicon: path.resolve(publicPath, "favicon.ico"),
     }),
     new MiniCssExtractPlugin({ filename: "[name].[hash].bundle.css" }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: publicPath,
+          globOptions: {
+            ignore: ["**/index.html", "**/favicon.ico"],
+          },
+        },
+      ],
+    }),
   ],
 };
 

@@ -12,6 +12,8 @@ import {
   useAppStore,
 } from "@/app";
 
+console.log(import.meta.env);
+
 const store = useAppStore();
 const services = useAppServices();
 const router = useAppRoutes();

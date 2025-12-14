@@ -1,8 +1,8 @@
 export const configs = {
   apiPrefix: "/api",
   apiHostname: "localhost",
-  apiPort: 5000,
-  apiSecPort: 5001,
+  apiPort: 5550,
+  apiSecPort: 5551,
   isSecure: false,
 
   cacheTtlSeconds: 600,

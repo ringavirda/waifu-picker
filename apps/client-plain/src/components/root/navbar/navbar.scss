@@ -1,0 +1,97 @@
+@use "styles/variables" as vars;
+@use "styles/mixins" as mx;
+
+.app-navbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  border-top: solid darkorange 3px;
+  border-bottom: solid darkorange 3px;
+
+  @media screen and (max-width: vars.$vertical-width) {
+    justify-content: space-evenly;
+  }
+
+  .navbar-item {
+    @include mx.button-interact();
+
+    min-width: max(120px, 15%);
+    margin: 0.2em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    font-size: x-large;
+    font-weight: bold;
+    font-family: verdana;
+    text-decoration: none;
+    text-align: center;
+    background-color: darkmagenta;
+    color: white;
+    filter: drop-shadow(1px 1px 1px grey);
+
+    @media screen and (min-width: vars.$vertical-width) {
+      margin-inline: 1em;
+    }
+  }
+
+  .navbar-load-select {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    border-radius: 2rem;
+    align-items: center;
+
+    @media screen and (min-width: vars.$vertical-width) {
+      margin-inline: 1rem;
+      margin-left: auto;
+    }
+
+    .load-label {
+      @include mx.button-interact();
+
+      padding: 1rem;
+      font-size: larger;
+      font-weight: bold;
+      font-family: sans-serif;
+      text-align: center;
+      color: white;
+      background-color: darkred;
+      width: 80px;
+
+      transition: background-color 0.2s;
+
+      &:not(:last-of-type) {
+        border-right: 3px solid red;
+      }
+    }
+  }
+
+  .navbar-poll-create {
+    @include mx.button-interact();
+
+    justify-self: flex-end;
+    align-self: center;
+    font-size: x-large;
+    font-weight: bold;
+    font-family: sans-serif;
+    padding: 1rem;
+    color: white;
+    background-color: darkred;
+    border-radius: 2rem;
+
+    @media screen and (min-width: vars.$vertical-width) {
+      margin-inline: 2rem;
+      margin-left: auto;
+    }
+  }
+}
+
+.selected {
+  outline: solid black 3px;
+  background-color: darkorchid !important;
+}
+
+.selected-load {
+  background-color: red !important;
+}

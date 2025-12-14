@@ -1,4 +1,4 @@
-import { component, ComponentBase } from "@/components";
+import { component, ComponentBase } from "@/app/components";
 import { CharsControls, CharsList } from "@/components/chars";
 
 export type CharsModel = {

@@ -1,4 +1,4 @@
-import { component, ComponentBase } from "@/components";
+import { component, ComponentBase } from "@/app/components";
 import { HomeCard, HomePrincess } from "@/components/home";
 
 const template = `

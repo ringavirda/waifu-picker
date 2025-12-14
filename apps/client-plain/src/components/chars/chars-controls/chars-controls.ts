@@ -1,8 +1,9 @@
-import { inject } from "tsyringe";
+import { inject } from "inversify";
 
-import { component, ComponentBase } from "@/components";
+import { TYPES } from "@/app";
+import { ICharactersApi } from "@/app/api";
+import { component, ComponentBase } from "@/app/components";
 import { CharsModel } from "@/components/chars";
-import { ICharsApi } from "@/services";
 
 import "./chars-controls.scss";
 import template from "./chars-controls.html";
@@ -13,7 +14,9 @@ export class CharsControls extends ComponentBase {
   private _ctrlBtnGet: HTMLButtonElement;
   private _ctrlBtnRandom: HTMLButtonElement;
 
-  constructor(@inject("ICharsApi") private readonly _api: ICharsApi) {
+  constructor(
+    @inject(TYPES.ICharactersApi) private readonly _api: ICharactersApi,
+  ) {
     super(CharsControls);
 
     this._ctrlInput = this.getElement(".ctrl-input");

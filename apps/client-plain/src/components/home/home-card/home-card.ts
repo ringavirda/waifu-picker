@@ -1,4 +1,4 @@
-import { component, ComponentBase } from "@/components";
+import { component, ComponentBase } from "@/app/components";
 
 import "./home-card.scss";
 const template = `

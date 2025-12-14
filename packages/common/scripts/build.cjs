@@ -8,9 +8,9 @@ function run(cmd) {
 
 try {
   console.log("Starting package build...");
-  run("yarn clear");
-  run("yarn format");
-  run("yarn lint");
+  run("rm -rf dist && mkdir -p dist");
+  run("yarn prettier . --write --log-level silent");
+  run("yarn eslint . --fix");
   console.log("Prebuild scripts completed.");
 
   console.log("Building TypeScript outputs...");
@@ -23,8 +23,8 @@ try {
   console.log("TypeScript build completed.");
 
   console.log("Starting postbuild steps...");
-  run("yarn cpy README.md dist/");
-  run("yarn cpy package.lib.json dist/ --rename package.json");
+  run("cp README.md dist/");
+  run("cp package.lib.json dist/package.json");
   console.log("Postbuild steps completed.");
 
   console.log("Build finished successfully!");

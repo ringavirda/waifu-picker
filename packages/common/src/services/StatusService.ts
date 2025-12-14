@@ -9,11 +9,15 @@ export class StatusService {
 
   public async isServerAlive(): Promise<boolean> {
     const statusEndpoint = StaticConfig.toApiRoute("/");
-    const response = await fetch(statusEndpoint);
-    if (response.ok) {
-      const parsed = (await response.json()) as StatusResponse;
-      return parsed.status === "Working";
+    try {
+      const response = await fetch(statusEndpoint);
+      if (response.ok) {
+        const parsed = (await response.json()) as StatusResponse;
+        return parsed.status === "Working";
+      }
+      return response.ok;
+    } catch {
+      return false;
     }
-    return response.ok;
   }
 }

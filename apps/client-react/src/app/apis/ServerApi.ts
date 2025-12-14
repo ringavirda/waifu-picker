@@ -4,9 +4,13 @@ import { StaticConfig, type Character } from "@wp/common";
 
 import { ApiBase } from "./ApiBase";
 
+const baseApiUrl = import.meta.env.VITE_API_BASE_URL
+  ? import.meta.env.VITE_API_BASE_URL
+  : StaticConfig.apiBaseUrl;
+
 export const serverApi = createApi({
   reducerPath: "serverApi",
-  baseQuery: fetchBaseQuery({ baseUrl: StaticConfig.apiBaseUrl }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseApiUrl }),
   endpoints: (builder) => ({
     getCharacters: builder.query<string[], void>({
       query: () => "chars",

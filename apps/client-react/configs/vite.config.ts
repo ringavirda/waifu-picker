@@ -8,7 +8,20 @@ const rootDir = path.resolve(__dirname, "../src");
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, path.resolve(__dirname), "");
   return {
-    plugins: [react(), tailwindcss()],
+    base: env.VITE_MODE === "production" ? "/waifu-new/" : "/",
+    plugins: [
+      react({
+        include: /\.[jt]sx?$/,
+        babel: {
+          plugins: [
+            ["babel-plugin-parameter-decorator"],
+            ["@babel/plugin-proposal-decorators", { legacy: true }],
+            ["@babel/plugin-proposal-class-properties", { loose: true }],
+          ],
+        },
+      }),
+      tailwindcss(),
+    ],
     root: rootDir,
     mode: env.VITE_MODE ?? "development",
     publicDir: path.resolve(rootDir, "../public"),
@@ -39,20 +52,23 @@ export default defineConfig(({ mode }) => {
             return `assets/[name].[hash].[ext]`;
           },
           manualChunks(id) {
-            if (id.includes("react")) {
+            // only match packages inside node_modules to avoid accidental matches in project files
+            const nm = path.sep + "node_modules" + path.sep;
+            if (
+              id.includes(nm + "react" + path.sep) ||
+              id.includes(nm + "react-dom" + path.sep)
+            ) {
               return "react-vendor";
-            } else if (id.includes("@wp")) {
+            } else if (id.includes(nm + "@wp" + path.sep)) {
               return "wp-libs";
-            } else if (id.includes("node_modules")) {
+            } else if (id.includes(nm)) {
               return "vendors";
             }
+            return undefined;
           },
         },
       },
-      outDir:
-        env.VITE_MODE === "production"
-          ? path.resolve(rootDir, "../../../dist/public")
-          : path.resolve(rootDir, "../dist"),
+      outDir: path.resolve(rootDir, "../dist"),
       minify: "terser",
       emptyOutDir: true,
     },

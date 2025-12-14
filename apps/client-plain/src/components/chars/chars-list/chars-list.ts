@@ -1,5 +1,10 @@
-import { component, ComponentBase, loadComponent } from "@/components";
-import { CharsCard, CharsError, CharsModel } from "@/components/chars";
+import {
+  component,
+  ComponentBase,
+  ErrorCard,
+  loadComponent,
+} from "@/app/components";
+import { CharsCard, CharsModel } from "@/components/chars";
 
 import "./chars-list.scss";
 const template = `<div class="chars-list"></div>`;
@@ -45,6 +50,6 @@ export class CharsList extends ComponentBase {
   }
 
   private async addError(error: Error): Promise<void> {
-    await loadComponent(this._charsList, CharsError, error);
+    await loadComponent(this._charsList, ErrorCard, error);
   }
 }

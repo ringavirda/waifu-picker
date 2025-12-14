@@ -1,16 +1,11 @@
 const path = require("path");
-const nodeExternals = require("webpack-node-externals");
 
 const entryPath = path.resolve(__dirname, "../src", "server.ts");
 
 const commonConfig = {
   target: "node",
   externalsPresets: { node: true },
-  externals: [
-    {
-      sharp: "commonjs sharp",
-    },
-  ],
+  externals: [{ sharp: "commonjs sharp" }],
   entry: {
     main: entryPath,
   },

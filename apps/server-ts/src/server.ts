@@ -3,17 +3,13 @@ import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 import http from "http";
-// import https from "https";
 import { Server } from "socket.io";
 import { access, constants } from "fs/promises";
 import { resolve } from "path";
-// import { readFileSync } from "fs";
-
 import { CharactersController } from "./controllers/characters";
 import { DefaultController } from "./controllers/default";
 import { PollingController } from "./controllers/polling";
 import {
-  // corsMiddleware,
   errorHandlingMiddleware,
   logger,
   loggingMiddleware,
@@ -23,6 +19,13 @@ import {
 import { JsonSerialization, StaticConfig } from "@wp/common";
 
 logger.info("Server", "Startup begin.");
+
+const serverPort = Number.parseInt(
+  process.env.SERVER_API_PORT ?? StaticConfig.apiPort.toString(),
+);
+const serverHostname =
+  process.env.SERVER_API_HOSTNAME ?? StaticConfig.apiHostname;
+const clientBasePath = process.env.SERVER_CLIENT_BASE_PATH ?? "/";
 
 const app = express();
 
@@ -34,13 +37,23 @@ app.use(
 );
 
 app.use(loggingMiddleware);
-app.use(cors({ origin: "*", credentials: true }));
-// app.use(corsMiddleware);
+if (process.env.NODE_ENV === "development")
+  app.use(cors({ origin: "*", credentials: true }));
+else app.use(cors({ origin: "https://felled-stars.org", credentials: true }));
+
+useControllerRoutes(DefaultController, app);
+DefaultController.preloadPrincess();
+useControllerRoutes(CharactersController, app);
+useControllerRoutes(PollingController, app);
 
 try {
   const staticPath = resolve(__dirname, "public");
+  console.log(staticPath);
   await access(staticPath, constants.F_OK);
-  app.use(express.static(staticPath));
+  app.use(
+    clientBasePath,
+    express.static(staticPath, { index: ["index.html"] }),
+  );
   logger.info("Server", `Client routes loaded`);
 } catch {
   logger.warn(
@@ -49,35 +62,22 @@ try {
   );
 }
 
-useControllerRoutes(DefaultController, app);
-DefaultController.preloadPrincess();
-useControllerRoutes(CharactersController, app);
-useControllerRoutes(PollingController, app);
-
 app.use(errorHandlingMiddleware);
 app.use(notFoundMiddleware);
 
 const server = http.createServer(app);
-server.listen(StaticConfig.apiPort, () => {
+server.listen(serverPort, serverHostname, () => {
   logger.info(
     "Server",
-    "Startup finished, listening on:" +
-      `\nhttp://${StaticConfig.apiHostname}:${StaticConfig.apiPort}`,
+    "Startup finished!" +
+      "\nListening on:" +
+      `\n\thttp://${serverHostname}:${serverPort}` +
+      "\nClient base path: " +
+      `\n\thttp://${serverHostname}:${serverPort}${clientBasePath}` +
+      "\nAPI base path: " +
+      `\n\thttp://${serverHostname}:${serverPort}/api`,
   );
 });
-
-// const options = {
-//   key: readFileSync(resolve(__dirname, "cert", "key.pem")),
-//   cert: readFileSync(resolve(__dirname, "cert", "cert.pem")),
-// };
-// const secServer = https.createServer(options, app);
-// secServer.listen(StaticConfig.commonSecPort, () => {
-//   logger.info(
-//     "Server",
-//     "Secure server is listening on:" +
-//       `\nhttps://localhost:${StaticConfig.commonSecPort}`,
-//   );
-// });
 
 if (process.argv.includes(`--preload`)) {
   logger.info("Server", `--preload was passed, starting to preload media...`);

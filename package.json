@@ -6,16 +6,31 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "node dist/main.bundle.js"
+    "build:wp-plain": "node scripts/build-wp-plain.js",
+    "build:wp-react": "node scripts/build-wp-react.js",
+    "build:all": "yarn build:wp-plain && yarn build:wp-react",
+    "start:wp-plain": "node dist/wp-plain/main.bundle.js",
+    "start:wp-react": "node dist/wp-react/main.bundle.js",
+    "send:pi": "node scripts/send-to-pi.js"
   },
   "dependencies": {
     "reflect-metadata": "^0.2.2",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
+    "@nx/eslint": "22.2.1",
+    "@nx/vite": "22.2.1",
+    "@nx/web": "22.2.1",
+    "@nx/webpack": "22.2.1",
+    "@vitest/ui": "^4.0.0",
     "eslint": "^9.39.1",
-    "nx": "22.0.4",
+    "http-server": "^14.1.1",
+    "jiti": "2.4.2",
+    "nx": "22.2.1",
     "prettier": "^3.6.2",
-    "typesync": "^0.14.3"
+    "typesync": "^0.14.3",
+    "vite": "^7.0.0",
+    "vitest": "^4.0.0",
+    "webpack-cli": "^5.1.4"
   }
 }

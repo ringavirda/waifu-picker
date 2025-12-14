@@ -8,7 +8,7 @@ import { Request, Response } from "express";
 import { PollingRepository } from "../services/pollsRepo";
 import { JsonSerialization, WaifuPoll } from "@wp/common";
 
-@controller("/api/pols")
+@controller("/api/polls")
 export class PollingController extends ControllerBase {
   constructor(private readonly _repo: PollingRepository) {
     super();
